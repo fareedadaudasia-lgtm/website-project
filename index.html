@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduSL – Learn. Grow. Succeed.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+/* ===== VARIABLES ===== */
+:root {
+  --green: #1a6b3c;
+  --green-light: #27a85f;
+  --green-pale: #e8f7ee;
+  --gold: #e8a020;
+  --gold-light: #fdf3e0;
+  --blue: #1a3a6b;
+  --dark: #0f1e14;
+  --text: #2c2c2c;
+  --text-light: #666;
+  --white: #ffffff;
+  --off-white: #f9fafb;
+  --border: #e2e8e4;
+  --shadow: 0 4px 24px rgba(26,107,60,0.10);
+  --shadow-lg: 0 12px 48px rgba(26,107,60,0.15);
+  --radius: 16px;
+  --radius-sm: 8px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--text); background: var(--white); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.navbar.scrolled { box-shadow: var(--shadow); }
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 24px;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.7rem; font-weight: 900;
+  color: var(--green);
+  letter-spacing: -0.5px;
+}
+.logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-link {
+  font-size: 0.9rem; font-weight: 500;
+  padding: 8px 16px; border-radius: 50px;
+  color: var(--text-light);
+  transition: all 0.2s;
+}
+.nav-link:hover, .nav-link.active { background: var(--green-pale); color: var(--green); }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.hamburger span {
+  display: block; width: 24px; height: 2px;
+  background: var(--green); border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-block;
+  padding: 14px 28px; border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: all 0.25s;
+}
+.btn-primary {
+  background: var(--green); color: var(--white);
+  box-shadow: 0 4px 16px rgba(26,107,60,0.25);
+}
+.btn-primary:hover {
+  background: var(--green-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(26,107,60,0.30);
+}
+.btn-outline {
+  background: transparent; color: var(--green);
+  border: 2px solid var(--green);
+}
+.btn-outline:hover { background: var(--green); color: white; transform: translateY(-2px); }
+.full-width { width: 100%; text-align: center; }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  padding: 120px 24px 80px;
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #f0faf5 0%, #fff9ee 100%);
+  width: 100%;
+}
+.hero-inner {
+  max-width: 1200px; width: 100%; margin: 0 auto;
+  display: flex; align-items: center;
+  gap: 60px; position: relative; z-index: 1;
+}
+.hero-bg { position: absolute; inset: 0; pointer-events: none; }
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); opacity: 0.35;
+}
+.blob1 { width: 500px; height: 500px; background: #a8e6c2; top: -150px; right: -100px; animation: drift 8s ease-in-out infinite; }
+.blob2 { width: 350px; height: 350px; background: #fde29a; bottom: -100px; left: -80px; animation: drift 10s ease-in-out infinite reverse; }
+.blob3 { width: 250px; height: 250px; background: #b3d4ff; top: 50%; left: 40%; animation: drift 12s ease-in-out infinite; }
+@keyframes drift { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+
+.hero-content { flex: 1; max-width: 560px; }
+.hero-tag {
+  display: inline-block;
+  background: var(--green-pale); color: var(--green);
+  font-size: 0.82rem; font-weight: 600;
+  padding: 6px 16px; border-radius: 50px;
+  margin-bottom: 24px; letter-spacing: 0.5px;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900; line-height: 1.05;
+  color: var(--dark); margin-bottom: 24px;
+}
+.hero-title em { font-style: italic; color: var(--green); }
+.hero-sub {
+  font-size: 1.05rem; color: var(--text-light);
+  line-height: 1.7; margin-bottom: 36px; max-width: 440px;
+}
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem; font-weight: 900;
+  color: var(--green); line-height: 1;
+}
+.stat-label { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; font-weight: 500; }
+.hero-visual { flex: 1; display: flex; align-items: center; justify-content: center; }
+.card-stack { position: relative; width: 320px; height: 360px; }
+.float-card {
+  position: absolute;
+  background: white; border: 1px solid var(--border);
+  border-radius: 16px; padding: 16px 20px;
+  font-weight: 600; font-size: 0.9rem;
+  box-shadow: var(--shadow); white-space: nowrap;
+  animation: floatCard 4s ease-in-out infinite;
+}
+.fc1 { top: 0; left: 0; animation-delay: 0s; background: var(--green-pale); border-color: #c2e8d0; }
+.fc2 { top: 80px; right: 0; animation-delay: 1s; background: #fff3cd; border-color: #fde29a; }
+.fc3 { bottom: 80px; left: 20px; animation-delay: 2s; background: #e8f0ff; border-color: #b3d4ff; }
+.fc4 { bottom: 0; right: 20px; animation-delay: 1.5s; background: #fff0f0; border-color: #ffd0d0; }
+@keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+/* ===== SECTIONS ===== */
+.section { padding: 100px 24px; }
+.container { max-width: 1200px; margin: 0 auto; }
+.section-label {
+  display: inline-block;
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--green); background: var(--green-pale);
+  padding: 5px 14px; border-radius: 50px;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900; color: var(--dark);
+  line-height: 1.15; margin-bottom: 48px;
+}
+
+/* ===== ABOUT ===== */
+.about { background: var(--off-white); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.about-text p { color: var(--text-light); line-height: 1.8; margin-bottom: 16px; font-size: 1rem; }
+.about-list { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+.about-list li { font-weight: 500; color: var(--text); }
+.about-img-box {
+  border-radius: var(--radius); overflow: hidden;
+  position: relative; box-shadow: var(--shadow-lg);
+  width: 100%; height: 360px;
+  background: linear-gradient(145deg, #1a6b3c 0%, #0f3d24 60%, #e8a020 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.about-img-box img { width: 100%; height: 360px; object-fit: cover; }
+.about-visual {
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  padding: 32px;
+}
+.about-visual-icon { font-size: 5rem; }
+.about-visual-text {
+  color: white; text-align: center;
+  font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
+  line-height: 1.4;
+}
+.about-visual-text span { color: #fde29a; }
+.about-visual-dots { display: flex; gap: 10px; margin-top: 8px; }
+.about-visual-dots i {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  display: block;
+}
+.about-visual-dots i:first-child { background: #fde29a; }
+.img-badge {
+  position: absolute; bottom: 20px; left: 20px;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+  padding: 10px 18px; border-radius: 50px;
+  font-size: 0.82rem; font-weight: 700; color: var(--green);
+  box-shadow: var(--shadow);
+}
+
+/* ===== SERVICES ===== */
+.services { background: var(--white); }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.service-card {
+  background: var(--off-white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px 28px;
+  transition: all 0.3s; cursor: default;
+}
+.service-card:hover {
+  background: var(--white); box-shadow: var(--shadow-lg);
+  transform: translateY(-6px); border-color: var(--green-light);
+}
+.service-icon { font-size: 2.2rem; margin-bottom: 16px; }
+.service-card h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--dark); }
+.service-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.7; }
+
+/* ===== RESOURCES ===== */
+.resources { background: var(--off-white); }
+.resource-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+.tab-btn {
+  padding: 10px 22px; border-radius: 50px;
+  border: 2px solid var(--border);
+  background: var(--white); font-family: var(--font-body);
+  font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; color: var(--text-light); transition: all 0.2s;
+}
+.tab-btn.active, .tab-btn:hover { background: var(--green); color: white; border-color: var(--green); }
+.resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.resource-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px; transition: all 0.3s;
+}
+.resource-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.resource-card.hidden { display: none; }
+.rc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.rc-subject { font-size: 0.78rem; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; }
+.rc-level { font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 50px; }
+.rc-level.jss { background: var(--green-pale); color: var(--green); }
+.rc-level.sss { background: var(--gold-light); color: var(--gold); }
+.rc-level.uni { background: #e8f0ff; color: var(--blue); }
+.resource-card h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--dark); }
+.resource-card p { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; margin-bottom: 18px; }
+.rc-link { font-size: 0.88rem; font-weight: 600; color: var(--green); transition: color 0.2s; cursor: pointer; }
+.rc-link:hover { color: var(--green-light); }
+
+/* ===== REGISTER ===== */
+.register { background: linear-gradient(135deg, var(--green) 0%, #0f3d24 100%); color: white; }
+.form-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.form-info .section-label { background: rgba(255,255,255,0.15); color: white; }
+.form-info p { color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 24px; font-size: 1rem; }
+.form-perks { display: flex; flex-direction: column; gap: 12px; }
+.form-perks li { color: rgba(255,255,255,0.9); font-weight: 500; }
+.form-box { background: white; border-radius: var(--radius); padding: 40px 36px; box-shadow: var(--shadow-lg); }
+.form-box h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; margin-bottom: 28px; color: var(--dark); }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 13px 16px;
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.93rem; color: var(--text);
+  transition: border-color 0.2s; outline: none; background: var(--off-white);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--green); background: white; }
+.form-group textarea { resize: vertical; }
+.error-msg { display: block; font-size: 0.78rem; color: #e74c3c; margin-top: 5px; min-height: 18px; }
+.form-note { text-align: center; font-size: 0.83rem; color: var(--text-light); margin-top: 16px; }
+.form-note a { color: var(--green); font-weight: 600; }
+
+/* ===== CONTACT ===== */
+.contact { background: var(--white); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; }
+.contact-info { display: flex; flex-direction: column; gap: 28px; }
+.contact-item { display: flex; gap: 16px; align-items: flex-start; }
+.ci-icon { font-size: 1.6rem; flex-shrink: 0; }
+.contact-item strong { display: block; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.contact-item p { color: var(--text-light); font-size: 0.93rem; }
+
+/* ===== FOOTER ===== */
+.footer { background: var(--dark); color: rgba(255,255,255,0.75); padding: 60px 24px 0; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+.footer-brand .logo { margin-bottom: 16px; }
+.footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 260px; }
+.footer-links strong { display: block; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; color: white; margin-bottom: 16px; }
+.footer-links ul { display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { font-size: 0.88rem; transition: color 0.2s; }
+.footer-links a:hover { color: var(--green-light); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px 0; text-align: center;
+  font-size: 0.83rem; color: rgba(255,255,255,0.4);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: white; border-radius: var(--radius);
+  padding: 48px 40px; max-width: 400px; width: 90%;
+  text-align: center; transform: scale(0.9);
+  transition: transform 0.3s; box-shadow: var(--shadow-lg);
+}
+.modal-overlay.active .modal-box { transform: scale(1); }
+.modal-icon { font-size: 3rem; margin-bottom: 16px; }
+.modal-box h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; margin-bottom: 12px; color: var(--dark); }
+.modal-box p { color: var(--text-light); line-height: 1.6; margin-bottom: 28px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .resource-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-visual { display: none; }
+  .hero-content { max-width: 100%; }
+}
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: white; border-bottom: 1px solid var(--border);
+    flex-direction: column; gap: 0;
+    padding: 16px; align-items: stretch; display: none;
+  }
+  .nav-links.open { display: flex; }
+  .nav-link { padding: 12px 16px; border-radius: var(--radius-sm); text-align: center; }
+  .hamburger { display: flex; }
+  .about-grid { grid-template-columns: 1fr; }
+  .form-wrap { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+  .resource-grid { grid-template-columns: 1fr; }
+  .hero { padding-top: 100px; }
+  .hero-cta { flex-direction: column; align-items: flex-start; }
+  .section { padding: 70px 24px; }
+}
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 20px; }
+  .form-box { padding: 28px 20px; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="logo">Edu<span>SL</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#resources" class="nav-link">Resources</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-bg">
+      <div class="blob blob1"></div>
+      <div class="blob blob2"></div>
+      <div class="blob blob3"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-tag">🇸🇱 Sierra Leone's Education Hub</div>
+        <h1 class="hero-title">Learn.<br /><em>Grow.</em><br />Succeed.</h1>
+        <p class="hero-sub">Free notes, assignments, and learning resources for every Sierra Leonean student from primary school to university.</p>
+        <div class="hero-cta">
+          <a href="#resources" class="btn btn-primary">Browse Resources</a>
+          <a href="#register" class="btn btn-outline">Join Free</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num" data-target="3200">0</span><span class="stat-label">Students</span></div>
+          <div class="stat"><span class="stat-num" data-target="480">0</span><span class="stat-label">Resources</span></div>
+          <div class="stat"><span class="stat-num" data-target="24">0</span><span class="stat-label">Subjects</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="card-stack">
+          <div class="float-card fc1">📚 Mathematics Notes</div>
+          <div class="float-card fc2">🔬 Science Practicals</div>
+          <div class="float-card fc3">💡 Past Questions</div>
+          <div class="float-card fc4">🌍 Geography Maps</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="section-label">Who We Are</div>
+      <h2 class="section-title">Built for Sierra Leone's Students</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>EduSL is a free digital education platform designed to bridge the learning gap across Sierra Leone. Many students in Freetown and beyond struggle to access quality study materials we're changing that.</p>
+          <p>Whether you're preparing for BECE, WASSCE, or a university exam, EduSL brings notes, past questions, video lessons, and assignments to your fingertips.</p>
+          <ul class="about-list">
+            <li>✅ 100% Free for all students</li>
+            <li>✅ Works on mobile phones</li>
+            <li>✅ Covers JSS, SSS, and University</li>
+            <li>✅ Updated by Sierra Leonean teachers</li>
+          </ul>
+        </div>
+        <div class="about-image-wrap">
+          <div class="about-img-box">
+            <div class="about-visual"><div class="about-visual-icon">🎓</div><div class="about-visual-text">Empowering Students<br><span>Across Sierra Leone</span></div><div class="about-visual-dots"><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="img-badge">Est. 2026 · Freetown, SL</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services section" id="services">
+    <div class="container">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">Our Services</h2>
+      <div class="services-grid">
+        <div class="service-card"><div class="service-icon">📖</div><h3>Study Notes</h3><p>Comprehensive notes for all major subjects — written and reviewed by local teachers.</p></div>
+        <div class="service-card"><div class="service-icon">📝</div><h3>Past Questions</h3><p>WASSCE and BECE past exam papers with model answers to prepare you for success.</p></div>
+        <div class="service-card"><div class="service-icon">🎥</div><h3>Video Lessons</h3><p>Short, engaging video lessons on complex topics — available for offline download.</p></div>
+        <div class="service-card"><div class="service-icon">📋</div><h3>Assignments</h3><p>Practice assignments with marking schemes so you can assess yourself anytime.</p></div>
+        <div class="service-card"><div class="service-icon">🗓️</div><h3>Exam Timetables</h3><p>Stay updated on WAEC and university exam schedules — never miss a date.</p></div>
+        <div class="service-card"><div class="service-icon">💬</div><h3>Ask a Teacher</h3><p>Submit your questions and get answers from qualified Sierra Leonean educators.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="resources section" id="resources">
+    <div class="container">
+      <div class="section-label">Learning Materials</div>
+      <h2 class="section-title">Browse Resources</h2>
+      <div class="resource-tabs">
+        <button class="tab-btn active" data-filter="all">All</button>
+        <button class="tab-btn" data-filter="jss">JSS</button>
+        <button class="tab-btn" data-filter="sss">SSS</button>
+        <button class="tab-btn" data-filter="university">University</button>
+      </div>
+      <div class="resource-grid" id="resourceGrid">
+        <div class="resource-card" data-level="jss">
+          <div class="rc-top"><span class="rc-subject">Mathematics</span><span class="rc-level jss">JSS</span></div>
+          <h4>Number &amp; Algebra Basics</h4>
+          <p>Fractions, decimals, ratios and introduction to algebra for JSS 1–3.</p>
+          <a href="#" class="rc-link" onclick="showAlert('Mathematics Notes')">Download PDF →</a>
+        </div>
+        <div class="resource-card" data-level="sss">
+          <div class="rc-top"><span class="rc-subject">English Language</span><span class="rc-level sss">SSS</span></div>
+          <h4>WASSCE Essay Writing Guide</h4>
+          <p>Structured techniques for writing high-scoring essays in the WASSCE exam.</p>
+          <a href="#" class="rc-link" onclick="showAlert('English Essay Guide')">Download PDF →</a>
+        </div>
+        <div class="resource-card" data-level="sss">
+          <div class="rc-top"><span class="rc-subject">Integrated Science</span><span class="rc-level sss">SSS</span></div>
+          <h4>Chemistry: Acids &amp; Bases</h4>
+          <p>Complete notes with diagrams on pH, indicators, and chemical reactions.</p>
+          <a href="#" class="rc-link" onclick="showAlert('Science Notes')">Download PDF →</a>
+        </div>
+        <div class="resource-card" data-level="university">
+          <div class="rc-top"><span class="rc-subject">Business Studies</span><span class="rc-level uni">University</span></div>
+          <h4>Principles of Marketing</h4>
+          <p>Marketing fundamentals, the 4Ps, consumer behaviour and Sierra Leone case studies.</p>
+          <a href="#" class="rc-link" onclick="showAlert('Marketing Notes')">Download PDF →</a>
+        </div>
+        <div class="resource-card" data-level="jss">
+          <div class="rc-top"><span class="rc-subject">Social Studies</span><span class="rc-level jss">JSS</span></div>
+          <h4>History of Sierra Leone</h4>
+          <p>From pre-colonial era to independence — key facts, dates, and figures.</p>
+          <a href="#" class="rc-link" onclick="showAlert('History Notes')">Download PDF →</a>
+        </div>
+        <div class="resource-card" data-level="university">
+          <div class="rc-top"><span class="rc-subject">ICT</span><span class="rc-level uni">University</span></div>
+          <h4>Web Design Fundamentals</h4>
+          <p>HTML, CSS, JavaScript basics — with practical projects and code examples.</p>
+          <a href="#" class="rc-link" onclick="showAlert('Web Design Notes')">Download PDF →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section class="register section" id="register">
+    <div class="container">
+      <div class="form-wrap">
+        <div class="form-info">
+          <div class="section-label">Get Started</div>
+          <h2 class="section-title" style="color:#fff">Join EduSL Today</h2>
+          <p>Create your free account and get instant access to hundreds of learning materials curated for Sierra Leonean students.</p>
+          <ul class="form-perks">
+            <li>🎓 Access all notes and past questions</li>
+            <li>📱 Works on your phone — no laptop needed</li>
+            <li>🔔 Get alerts for new resources</li>
+            <li>👩‍🏫 Connect with teachers</li>
+          </ul>
+        </div>
+        <div class="form-box">
+          <h3>Create Free Account</h3>
+          <div class="form-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" placeholder="e.g. Aminata Koroma" />
+            <span class="error-msg" id="nameError"></span>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="yourname@example.com" />
+            <span class="error-msg" id="emailError"></span>
+          </div>
+          <div class="form-group">
+            <label for="level">Education Level</label>
+            <select id="level">
+              <option value="">Select your level</option>
+              <option value="jss">Junior Secondary (JSS)</option>
+              <option value="sss">Senior Secondary (SSS)</option>
+              <option value="university">University / Tertiary</option>
+              <option value="teacher">Teacher / Educator</option>
+            </select>
+            <span class="error-msg" id="levelError"></span>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Min. 6 characters" />
+            <span class="error-msg" id="passError"></span>
+          </div>
+          <button class="btn btn-primary full-width" onclick="handleRegister()">Register Now →</button>
+          <p class="form-note">Already have an account? <a href="#" onclick="showAlert('Login page coming soon!')">Log in</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Contact Us</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item"><span class="ci-icon">📍</span><div><strong>Location</strong><p>Freetown, Sierra Leone</p></div></div>
+          <div class="contact-item"><span class="ci-icon">📧</span><div><strong>Email</strong><p>hello@edusl.org</p></div></div>
+          <div class="contact-item"><span class="ci-icon">📞</span><div><strong>Phone</strong><p>+232 76 000 000</p></div></div>
+          <div class="contact-item"><span class="ci-icon">⏰</span><div><strong>Support Hours</strong><p>Mon – Fri, 8am – 6pm</p></div></div>
+        </div>
+        <div class="contact-form-box">
+          <div class="form-group"><label for="cname">Your Name</label><input type="text" id="cname" placeholder="Full name" /></div>
+          <div class="form-group"><label for="cemail">Email Address</label><input type="email" id="cemail" placeholder="your@email.com" /></div>
+          <div class="form-group"><label for="cmsg">Message</label><textarea id="cmsg" rows="4" placeholder="How can we help you?"></textarea></div>
+          <button class="btn btn-primary full-width" onclick="handleContact()">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="font-size:1.5rem">Edu<span>SL</span></div>
+          <p>Empowering Sierra Leonean students through free, accessible digital education.</p>
+        </div>
+        <div class="footer-links">
+          <strong>Quick Links</strong>
+          <ul>
+            <li><a href="#home">Home</a></li><li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li><li><a href="#resources">Resources</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <strong>Subjects</strong>
+          <ul>
+            <li><a href="#">Mathematics</a></li><li><a href="#">English Language</a></li>
+            <li><a href="#">Sciences</a></li><li><a href="#">ICT</a></li>
+            <li><a href="#">Business Studies</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <strong>Support</strong>
+          <ul>
+            <li><a href="#">FAQ</a></li><li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Use</a></li><li><a href="#">Report Issue</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>© 2026 EduSL. Made with ❤️ for Sierra Leone.</p></div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="modal-icon">🎉</div>
+      <h3 id="modalTitle">Success!</h3>
+      <p id="modalMsg">You have been registered successfully.</p>
+      <button class="btn btn-primary" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+// ===== NAVBAR SCROLL =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ===== HAMBURGER =====
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  const spans = hamburger.querySelectorAll('span');
+  const open = navLinks.classList.contains('open');
+  spans[0].style.transform = open ? 'rotate(45deg) translate(5px, 5px)' : '';
+  spans[1].style.opacity = open ? '0' : '';
+  spans[2].style.transform = open ? 'rotate(-45deg) translate(5px, -5px)' : '';
+});
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    hamburger.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  });
+});
+
+// ===== ACTIVE NAV ON SCROLL =====
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 100) current = sec.id; });
+  navItems.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+});
+
+// ===== COUNTERS =====
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const step = target / (2000 / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) { el.textContent = target.toLocaleString() + '+'; clearInterval(timer); }
+    else el.textContent = Math.floor(current).toLocaleString();
+  }, 16);
+}
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); counterObserver.unobserve(e.target); } });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-num').forEach(el => counterObserver.observe(el));
+
+// ===== RESOURCE FILTER =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.resource-card').forEach(card => {
+      card.classList.toggle('hidden', filter !== 'all' && card.dataset.level !== filter);
+    });
+  });
+});
+
+// ===== FORM VALIDATION =====
+function handleRegister() {
+  const name = document.getElementById('fullname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const level = document.getElementById('level').value;
+  const pass = document.getElementById('password').value;
+  ['nameError','emailError','levelError','passError'].forEach(id => document.getElementById(id).textContent = '');
+  let valid = true;
+  if (name.length < 3) { document.getElementById('nameError').textContent = 'Please enter your full name.'; valid = false; }
+  if (!email.includes('@') || !email.includes('.')) { document.getElementById('emailError').textContent = 'Please enter a valid email address.'; valid = false; }
+  if (!level) { document.getElementById('levelError').textContent = 'Please select your education level.'; valid = false; }
+  if (pass.length < 6) { document.getElementById('passError').textContent = 'Password must be at least 6 characters.'; valid = false; }
+  if (valid) {
+    showModal('🎉 Welcome to EduSL!', `Hi ${name}! Your account has been created. Start exploring free learning resources today.`);
+    ['fullname','email','level','password'].forEach(id => document.getElementById(id).value = '');
+  }
+}
+function handleContact() {
+  const name = document.getElementById('cname').value.trim();
+  const email = document.getElementById('cemail').value.trim();
+  const msg = document.getElementById('cmsg').value.trim();
+  if (!name || !email || !msg) { showModal('⚠️ Incomplete Form', 'Please fill in all fields before sending your message.'); return; }
+  if (!email.includes('@')) { showModal('⚠️ Invalid Email', 'Please enter a valid email address.'); return; }
+  showModal('✅ Message Sent!', 'Thank you for reaching out. We will get back to you within 24 hours.');
+  ['cname','cemail','cmsg'].forEach(id => document.getElementById(id).value = '');
+}
+
+// ===== MODAL =====
+function showModal(title, msg) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMsg').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+function showAlert(name) { showModal('📥 Download Starting', `"${name}" will be available for download soon. Create a free account to access all materials!`); }
+
+// ===== FADE IN ON SCROLL =====
+const fadeObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; fadeObserver.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.service-card, .resource-card, .contact-item, .about-img-box').forEach((el, i) => {
+  el.style.cssText += `opacity:0;transform:translateY(24px);transition:opacity 0.5s ease ${i*0.07}s,transform 0.5s ease ${i*0.07}s`;
+  fadeObserver.observe(el);
+});
+  </script>
+</body>
+</html>
